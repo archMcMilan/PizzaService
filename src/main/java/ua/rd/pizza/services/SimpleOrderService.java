@@ -1,5 +1,6 @@
 package ua.rd.pizza.services;
 
+import ua.rd.pizza.annotation.Benchmark;
 import ua.rd.pizza.domain.Customer;
 import ua.rd.pizza.domain.Order;
 import ua.rd.pizza.domain.Pizza;

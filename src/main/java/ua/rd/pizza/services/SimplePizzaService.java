@@ -1,5 +1,6 @@
 package ua.rd.pizza.services;
 
+import ua.rd.pizza.annotation.Benchmark;
 import ua.rd.pizza.domain.Pizza;
 import ua.rd.pizza.infrastructure.InitialContext;
 import ua.rd.pizza.repository.InMemoryPizzaRepository;
@@ -20,6 +21,7 @@ public class SimplePizzaService implements PizzaService {
     }
 
     @Override
+    @Benchmark
     public Pizza getPizzaById(Integer id) {
         return pizzaRepository.get(id);
     }
