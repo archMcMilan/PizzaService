@@ -138,27 +138,6 @@ public class ApplicationContext implements Context {
                         }
                     });
         }
-//            Method[] methods=type.getMethods();
-//            for(Method method:methods){
-//                if(method.isAnnotationPresent(Benchmark.class)){
-//                    proxyBean=Proxy.newProxyInstance(bean.getClass().getClassLoader(), bean.getClass().getInterfaces(),
-//                            new InvocationHandler() {
-//                        @Override
-//                        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-//                            long startTime=System.nanoTime();
-//                            Object returnObject=method.invoke(bean,args);
-//                            long finishTime=System.nanoTime();
-//                            System.out.println(finishTime-startTime);
-//                            return returnObject;
-//                        }
-//                    });
-//                    Object[] args=method.getParameterTypes();
-//                    try {
-//                        method.invoke(bean,args);
-//                    } catch (Exception e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
     }
 }
 
