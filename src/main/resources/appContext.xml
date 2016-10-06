@@ -4,21 +4,6 @@
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean name="pizzaRepository"
-          class="ua.rd.pizza.repository.InMemoryPizzaRepository"
-          init-method="init"
-    />
-    <bean name="orderRepository"
-          class="ua.rd.pizza.repository.InMemoryOrderRepository"
-    />
-    <bean name="pizzaService"
-          class="ua.rd.pizza.services.SimplePizzaService">
-        <constructor-arg ref="pizzaRepository"/>
-    </bean>
-    <bean name="orderService"
-          class="ua.rd.pizza.services.SimpleOrderService">
-        <constructor-arg ref="pizzaService"/>
-        <constructor-arg ref="orderRepository"/>
-    </bean>
+    <bean name="T1" class="ua.rd.pizza.services.Test2SomeService"/>
 
 </beans>
