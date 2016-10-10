@@ -44,7 +44,8 @@ public class OrderTest {
     @Test
     public void addUnavailableAmountOfPizzas_returnFalse(){
         Assert.assertEquals(false, order.addPizza(pizzas.get(0),0));
-        Assert.assertEquals(false, order.addPizza(pizzas.get(0),11));
+        order.addPizza(pizzas.get(0),7);
+        Assert.assertEquals(false, order.addPizza(pizzas.get(1),4));
     }
 
     @Test
@@ -68,4 +69,17 @@ public class OrderTest {
         Assert.assertEquals(new BigDecimal("420.10"),order.countOrderPrice());
     }
 
+    @Test
+    public void jumpIntoStatus(){
+        order.addPizza(pizzas.get(0),3);
+        Assert.assertTrue(order.getStatus().jumpIntoStatus(Order.Status.IN_PROGRESS));
+        Assert.assertFalse(order.getStatus().jumpIntoStatus(Order.Status.DONE));
+    }
+
+    @Test
+    public void setStatus(){
+        order.addPizza(pizzas.get(0),3);
+        order.setStatus(Order.Status.IN_PROGRESS);
+        Assert.assertEquals(Order.Status.IN_PROGRESS,order.getStatus());
+    }
 }

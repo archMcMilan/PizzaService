@@ -1,6 +1,9 @@
 package ua.rd.pizza.domain;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
+
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -10,27 +13,35 @@ public class Order {
     private Long id;
     private List<Pizza> pizzas;
     private Customer customer;
+    private Status status;
 
     public static final String DISCOUNT_VALUE="0.3";
     public static final int PIZZAS_FOR_DISCOUNT=4;
 
+    public enum Status{
+        NEW("IN_PROGRESS", "CANCELED"),
+        IN_PROGRESS("DONE"),
+        CANCELED(),
+        DONE();
+
+        List<String> availableStatusesToJumpIn;
+
+        Status(String ... statusNames) {
+            availableStatusesToJumpIn=Arrays.asList(statusNames);
+        }
+
+        public boolean jumpIntoStatus(Status status){
+            if(this.availableStatusesToJumpIn.contains(status.name())){
+                return true;
+            }
+            return false;
+        }
+    }
     public Order(Customer customer,List<Pizza> pizzas) {
         this.pizzas = pizzas;
         this.customer = customer;
+        status=Status.NEW;
     }
-
-    public boolean addPizza(Pizza pizza, int amount) {
-        if(amount<=0 || amount>10){
-            return false;
-        }
-        for(int i=0;i<amount;i++){
-            if(!pizzas.add(pizza)){
-               return false;
-            }
-        }
-        return true;
-    }
-
 
 
     @Override
@@ -42,29 +53,41 @@ public class Order {
                 '}';
     }
 
-    public Long getId() {
-        return id;
-    }
 
     public List<Pizza> getPizzas() {
         return pizzas;
-    }
-
-    public Customer getCustomer() {
-        return customer;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setPizzas(List<Pizza> pizzas) {
-        this.pizzas = pizzas;
-    }
-
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
+    public void setStatus(Status status) {
+        if(this.status.jumpIntoStatus(status)){
+            this.status=status;
+        }
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public boolean addPizza(Pizza pizza, int amount) {
+        if(pizzas.size()+amount>10 || pizzas.size()+amount<=0){
+            return false;
+        }
+        for(int i=0;i<amount;i++){
+            if(!pizzas.add(pizza)){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public BigDecimal getOrderPrice() {
         BigDecimal price=new BigDecimal("0.00");
