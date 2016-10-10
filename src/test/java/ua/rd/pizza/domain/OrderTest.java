@@ -15,13 +15,10 @@ import static org.junit.Assert.*;
  */
 public class OrderTest {
     Order order;
-
+    List<Pizza> pizzas=new ArrayList<>();
     @Before
     public void setUp(){
         Customer customer=new Customer(1L,"Daniil");
-
-        List<Pizza> pizzas=new ArrayList<>();
-
         pizzas.add(new Pizza(1L, "Hawaii", BigDecimal.valueOf(98.00),Pizza.Type.MEAT));
         pizzas.add(new Pizza(2L, "Falafel", BigDecimal.valueOf(57.90),Pizza.Type.VEGETARIAN));
         pizzas.add(new Pizza(3L, "Sea", BigDecimal.valueOf(120.10),Pizza.Type.SEA));
@@ -30,12 +27,20 @@ public class OrderTest {
         order.setId(0L);
     }
     @Test
-    public void addPizzaAmountIntoOrder(){
-        Pizza pizza=new Pizza(1L, "Hawaii", BigDecimal.valueOf(98.00),Pizza.Type.MEAT);
-        order.addPizza(pizza,3);
+    public void addPizzasWithAmountIntoOrder(){
+        order.addPizza(pizzas.get(0),3);
         Assert.assertEquals(3,order.getPizzas().size());
-        Assert.assertEquals(pizza,order.getPizzas().get(0));
+        Assert.assertEquals(pizzas.get(0),order.getPizzas().get(0));
     }
+
+    @Test
+    public void addTwoPizzasWithAmountIntoOrder(){
+        order.addPizza(pizzas.get(0),3);
+        order.addPizza(pizzas.get(1),2);
+        Assert.assertEquals(5,order.getPizzas().size());
+        Assert.assertEquals(pizzas.get(1),order.getPizzas().get(4));
+    }
+
 
 
 }

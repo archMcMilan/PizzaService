@@ -16,6 +16,9 @@ public class Order {
     }
 
     public boolean addPizza(Pizza pizza, int amount) {
+        if(amount<=0 || amount>10){
+            return false;
+        }
         for(int i=0;i<amount;i++){
             if(!pizzas.add(pizza)){
                return false;
@@ -23,6 +26,8 @@ public class Order {
         }
         return true;
     }
+
+
 
     @Override
     public String toString() {
