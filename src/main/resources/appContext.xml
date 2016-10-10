@@ -4,6 +4,21 @@
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean name="T1" class="ua.rd.pizza.services.Test2SomeService"/>
+    <!--<bean name="T1" class="ua.rd.pizza.services.Test2SomeService"/>-->
+    <bean name="pizzaService"
+          class="ua.rd.pizza.services.SimplePizzaService">
+        <constructor-arg ref="pizzaRepository"/>
+    </bean>
+    <bean name="orderService"
+          class="ua.rd.pizza.services.SimpleOrderService">
+        <constructor-arg ref="pizzaService"/>
+        <constructor-arg ref="orderRepository"/>
+    </bean>
+
+    <bean class="ua.rd.pizza.services.UsageSomeService">
+        <constructor-arg>
+            <bean name="AAA" class="ua.rd.pizza.services.Test2SomeService"/>
+        </constructor-arg>
+    </bean>
 
 </beans>
