@@ -31,4 +31,8 @@ public class Pizza {
                 ", type=" + type +
                 '}';
     }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
 }

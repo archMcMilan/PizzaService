@@ -1,5 +1,6 @@
 package ua.rd.pizza.domain;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -9,6 +10,9 @@ public class Order {
     private Long id;
     private List<Pizza> pizzas;
     private Customer customer;
+
+    public static final String DISCOUNT_VALUE="0.3";
+    public static final int PIZZAS_FOR_DISCOUNT=4;
 
     public Order(Customer customer,List<Pizza> pizzas) {
         this.pizzas = pizzas;
@@ -60,5 +64,33 @@ public class Order {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public BigDecimal getOrderPrice() {
+        BigDecimal price=new BigDecimal("0.00");
+        for(Pizza pizza:pizzas){
+            price=price.add(pizza.getPrice());
+        }
+        return price;
+    }
+
+    public BigDecimal getDiscountPrice() {
+        BigDecimal price=new BigDecimal("0.00");
+        Pizza mostExpensivePizza=pizzas.get(0);
+        for(Pizza pizza:pizzas){
+            if(mostExpensivePizza.getPrice().compareTo(pizza.getPrice())<0){
+                mostExpensivePizza=pizza;
+            }
+            price=price.add(pizza.getPrice());
+        }
+        price=price.subtract(mostExpensivePizza.getPrice().multiply(new BigDecimal(DISCOUNT_VALUE)));
+        return price;
+    }
+
+    public BigDecimal countOrderPrice(){
+        if(pizzas.size()>PIZZAS_FOR_DISCOUNT){
+            return getDiscountPrice();
+        }
+        return getOrderPrice();
     }
 }
