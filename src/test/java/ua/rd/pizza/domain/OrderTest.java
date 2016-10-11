@@ -16,14 +16,18 @@ import static org.junit.Assert.*;
 public class OrderTest {
     Order order;
     List<Pizza> pizzas=new ArrayList<>();
+    List<Customer> customers=new ArrayList<>();
     @Before
     public void setUp(){
-        Customer customer=new Customer(1L,"Daniil");
         pizzas.add(new Pizza(1L, "Hawaii", BigDecimal.valueOf(100.00),Pizza.Type.MEAT));
         pizzas.add(new Pizza(2L, "Falafel", BigDecimal.valueOf(57.70),Pizza.Type.VEGETARIAN));
         pizzas.add(new Pizza(3L, "Sea", BigDecimal.valueOf(120.10),Pizza.Type.SEA));
 
-        order=new Order(customer,new ArrayList<>());
+        customers.add(new Customer(0L, "Artem", "Pushkina st"));
+        customers.add(new Customer(1L, "Daniil", "Nezalezhnosti av"));
+        customers.add(new Customer(2L, "Olya", "Pochmelnyka blvd"));
+
+        order=new Order(customers.get(0),new ArrayList<>());
         order.setId(0L);
     }
     @Test
@@ -77,9 +81,17 @@ public class OrderTest {
     }
 
     @Test
-    public void setStatus(){
+    public void checkSetStatus(){
         order.addPizza(pizzas.get(0),3);
         order.setStatus(Order.Status.IN_PROGRESS);
         Assert.assertEquals(Order.Status.IN_PROGRESS,order.getStatus());
     }
+
+    @Test
+    public void jumpIntoStatusFromStatusThatHasNoWayToJump(){
+        order.setStatus(Order.Status.CANCELED);
+        Assert.assertFalse(order.getStatus().jumpIntoStatus(Order.Status.DONE));
+    }
+
+
 }
