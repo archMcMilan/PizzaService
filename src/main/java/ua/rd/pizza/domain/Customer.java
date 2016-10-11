@@ -15,6 +15,11 @@ public class Customer {
         this.id = id;
         this.name = name;
         this.address = address;
+        accumulativeCard=new BigDecimal("0.00");
+    }
+
+    public BigDecimal getAccumulativeCard() {
+        return accumulativeCard;
     }
 
     public boolean addPriceToCard(BigDecimal price){

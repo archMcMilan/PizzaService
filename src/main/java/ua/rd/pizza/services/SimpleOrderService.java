@@ -1,8 +1,8 @@
 package ua.rd.pizza.services;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
+import org.springframework.stereotype.Service;
 import ua.rd.pizza.domain.Customer;
 import ua.rd.pizza.domain.Order;
 import ua.rd.pizza.domain.Pizza;
@@ -24,7 +24,7 @@ public class SimpleOrderService implements OrderService/*, ApplicationContextAwa
 //        orderRepository=null;
 //        this.pizzaService=pizzaService;
 //    }
-
+    @Autowired
     public SimpleOrderService(OrderRepository orderRepository, PizzaService pizzaService) {
         this.orderRepository = orderRepository;
         this.pizzaService = pizzaService;
@@ -46,6 +46,7 @@ public class SimpleOrderService implements OrderService/*, ApplicationContextAwa
         return newOrder;
     }
 
+    @Lookup
     protected Order createNewOrder() {
 //        return (Order) applicationContext.getBean("order");
         //throw new IllegalStateException();

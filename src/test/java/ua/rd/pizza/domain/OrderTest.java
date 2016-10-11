@@ -2,6 +2,7 @@ package ua.rd.pizza.domain;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -76,8 +77,9 @@ public class OrderTest {
     @Test
     public void jumpIntoStatus(){
         order.addPizza(pizzas.get(0),3);
-        Assert.assertTrue(order.getStatus().jumpIntoStatus(Order.Status.IN_PROGRESS));
-        Assert.assertFalse(order.getStatus().jumpIntoStatus(Order.Status.DONE));
+        Assert.assertTrue(order.getStatus().jumpIntoStatus(Order.Status.DONE));
+        Assert.assertTrue(order.getStatus().jumpIntoStatus(Order.Status.CANCELED));
+        Assert.assertFalse(order.getStatus().jumpIntoStatus(Order.Status.NEW));
     }
 
     @Test
@@ -93,5 +95,15 @@ public class OrderTest {
         Assert.assertFalse(order.getStatus().jumpIntoStatus(Order.Status.DONE));
     }
 
+    @Test
+    public void addOrderPriceToCustomerCard(){
+        order.addPizza(pizzas.get(0),3);
+        order.payForOrder();
+        Assert.assertEquals(Order.Status.DONE,order.getStatus());
+        Assert.assertEquals(new BigDecimal("300.00"),order.getCustomer().getAccumulativeCard());
+        Order order2=new Order(customers.get(0),new ArrayList<>());
+        order2.addPizza(pizzas.get(0),2);
+        Assert.assertEquals(new BigDecimal("500.00"),order.getCustomer().getAccumulativeCard());
+    }
 
 }

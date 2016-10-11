@@ -1,6 +1,8 @@
 package ua.rd.pizza.domain;
 
 import com.sun.org.apache.xpath.internal.operations.Or;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -10,6 +12,8 @@ import java.util.List;
 /**
  * Created by Artem_Pryzhkov on 10/4/2016.
  */
+@Component
+@Scope("prototype")
 public class Order {
     private Long id;
     private List<Pizza> pizzas;
@@ -90,6 +94,10 @@ public class Order {
         return status;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
     public boolean addPizza(Pizza pizza, int amount) {
         if (pizzas.size() + amount > 10 || pizzas.size() + amount <= 0) {
             return false;
@@ -99,6 +107,7 @@ public class Order {
                 return false;
             }
         }
+        status=Status.IN_PROGRESS;
         return true;
     }
 
@@ -132,7 +141,11 @@ public class Order {
     }
 
     public void payForOrder() {
-        setStatus(Status.DONE);
+        if(status.equals(Status.IN_PROGRESS)){
+            setStatus(Status.DONE);
+        }else {
+            throw new RuntimeException();
+        }
         customer.addPriceToCard(countOrderPrice());
     }
 }

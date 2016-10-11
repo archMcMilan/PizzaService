@@ -1,5 +1,6 @@
 package ua.rd.pizza.repository;
 
+import org.springframework.stereotype.Repository;
 import ua.rd.pizza.domain.Customer;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 /**
  * Created by Artem_Pryzhkov on 11-Oct-16.
  */
+@Repository
 public class InMemoryCustomerRepository implements CustomerRepository {
     private List<Customer> customers = new ArrayList<>();
 
