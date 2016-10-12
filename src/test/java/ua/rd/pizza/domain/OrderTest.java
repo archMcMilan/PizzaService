@@ -2,14 +2,12 @@ package ua.rd.pizza.domain;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runners.Parameterized;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Artem_Pryzhkov on 10-Oct-16.
@@ -33,14 +31,14 @@ public class OrderTest {
     }
     @Test
     public void addPizzasWithAmountIntoOrder(){
-        order.addPizza(pizzas.get(0),3);
+        initOrder();
         Assert.assertEquals(3,order.getPizzas().size());
         Assert.assertEquals(pizzas.get(0),order.getPizzas().get(0));
     }
 
     @Test
     public void addTwoPizzasWithAmountIntoOrder(){
-        order.addPizza(pizzas.get(0),3);
+        initOrder();
         order.addPizza(pizzas.get(1),2);
         Assert.assertEquals(5,order.getPizzas().size());
         Assert.assertEquals(pizzas.get(1),order.getPizzas().get(4));
@@ -55,13 +53,13 @@ public class OrderTest {
 
     @Test
     public void countOrderPrice(){
-        order.addPizza(pizzas.get(0),3);
-        Assert.assertEquals(new BigDecimal("300.00"),order.getOrderPrice());
+        initOrder();
+        Assert.assertEquals(new BigDecimal("300.00"),order.getOrderFullPrice());
     }
 
     @Test
     public void discountCase(){
-        order.addPizza(pizzas.get(0),3);
+        initOrder();
         order.addPizza(pizzas.get(2),1);
         order.addPizza(pizzas.get(1),1);
         Assert.assertEquals(new BigDecimal("441.77"),order.countOrderPrice());
@@ -69,14 +67,14 @@ public class OrderTest {
 
     @Test
     public void notEnoughPizzasForDiscount(){
-        order.addPizza(pizzas.get(0),3);
+        initOrder();
         order.addPizza(pizzas.get(2),1);
-        Assert.assertEquals(new BigDecimal("420.10"),order.countOrderPrice());
+        Assert.assertEquals(new BigDecimal("420.1"),order.countOrderPrice());
     }
 
     @Test
     public void jumpIntoStatus(){
-        order.addPizza(pizzas.get(0),3);
+        initOrder();
         Assert.assertTrue(order.getStatus().jumpIntoStatus(Order.Status.DONE));
         Assert.assertTrue(order.getStatus().jumpIntoStatus(Order.Status.CANCELED));
         Assert.assertFalse(order.getStatus().jumpIntoStatus(Order.Status.NEW));
@@ -84,7 +82,7 @@ public class OrderTest {
 
     @Test
     public void checkSetStatus(){
-        order.addPizza(pizzas.get(0),3);
+        initOrder();
         order.setStatus(Order.Status.IN_PROGRESS);
         Assert.assertEquals(Order.Status.IN_PROGRESS,order.getStatus());
     }
@@ -97,13 +95,32 @@ public class OrderTest {
 
     @Test
     public void addOrderPriceToCustomerCard(){
-        order.addPizza(pizzas.get(0),3);
+        order.addPizza(pizzas.get(1),3);
         order.payForOrder();
         Assert.assertEquals(Order.Status.DONE,order.getStatus());
-        Assert.assertEquals(new BigDecimal("300.00"),order.getCustomer().getAccumulativeCard());
+        Assert.assertEquals(new BigDecimal("173.10"),order.getCustomer().getAccumulativeCard());
         Order order2=new Order(customers.get(0),new ArrayList<>());
         order2.addPizza(pizzas.get(0),2);
-        Assert.assertEquals(new BigDecimal("500.00"),order.getCustomer().getAccumulativeCard());
+        order2.payForOrder();
+        Assert.assertEquals(new BigDecimal("355.79"),customers.get(0).getAccumulativeCard());
     }
+
+
+    @Test()
+    public void AccCardValueHigherThanDiscountLevelPercentOfOrderPrice(){
+        initOrder();
+        initOrder();
+        order.payForOrder();
+        Assert.assertEquals(new BigDecimal("570.00"),order.getCustomer().getAccumulativeCard());
+        Order order2=new Order(customers.get(0),new ArrayList<>());
+        order2.addPizza(pizzas.get(1),1);
+        order2.payForOrder();
+        Assert.assertEquals(new BigDecimal("40.39"),order2.countOrderPrice());
+    }
+
+    private void initOrder() {
+        order.addPizza(pizzas.get(0),3);
+    }
+
 
 }

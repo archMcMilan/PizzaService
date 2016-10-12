@@ -22,6 +22,7 @@ public class Customer {
         return accumulativeCard;
     }
 
+
     public boolean addPriceToCard(BigDecimal price){
         try{
             accumulativeCard=accumulativeCard.add(price);
