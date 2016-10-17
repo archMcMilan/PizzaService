@@ -35,4 +35,5 @@
     <context:component-scan base-package="ua.rd.pizza.services"/>
     <context:component-scan base-package="ua.rd.pizza.domain"/>
     <context:annotation-config/>
+    <bean class="ua.rd.pizza.infrastructure.BenchmarkBeanPostProcessor"/>
 </beans>
