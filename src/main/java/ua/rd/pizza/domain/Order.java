@@ -4,9 +4,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Artem_Pryzhkov on 10/4/2016.
@@ -15,7 +13,7 @@ import java.util.List;
 @Scope("prototype")
 public class Order {
     private Long id;
-    private List<Pizza> pizzas;
+    private Map<Pizza,Integer> pizzas;
     private Customer customer;
     private Status status;
 
@@ -46,7 +44,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(Customer customer, List<Pizza> pizzas) {
+    public Order(Customer customer, Map<Pizza,Integer> pizzas) {
         this.pizzas = pizzas;
         if (customer != null) {
             this.customer = customer;
@@ -68,7 +66,7 @@ public class Order {
     }
 
 
-    public List<Pizza> getPizzas() {
+    public Map<Pizza,Integer> getPizzas() {
         return pizzas;
     }
 
@@ -86,7 +84,7 @@ public class Order {
         }
     }
 
-    public void setPizzas(List<Pizza> pizzas) {
+    public void setPizzas(Map<Pizza,Integer> pizzas) {
         this.pizzas = pizzas;
     }
 
@@ -99,23 +97,28 @@ public class Order {
     }
 
     public boolean addPizza(Pizza pizza, int amount) {
-        if (pizzas.size() + amount > 10 || pizzas.size() + amount <= 0) {
+        int pizzasInOrder=countPizzasAmount();
+        if (pizzasInOrder + amount > 10 || pizzasInOrder + amount <= 0) {
             return false;
         }
-        for (int i = 0; i < amount; i++) {
-            if (!pizzas.add(pizza)) {
-                return false;
-            }
-        }
+        pizzas.merge(pizza,amount,Integer::sum);
         status=Status.IN_PROGRESS;
         return true;
+    }
+
+    private int countPizzasAmount(){
+        int pizzasInOrder=0;
+        for(Pizza p:pizzas.keySet()){
+            pizzasInOrder+=pizzas.get(p);
+        }
+        return pizzasInOrder;
     }
 
 
     public BigDecimal getOrderFullPrice() {
         BigDecimal price = new BigDecimal("0.00");
-        for (Pizza pizza : pizzas) {
-            price = price.add(pizza.getPrice());
+        for(Pizza pizza:pizzas.keySet()){
+            price= price.add(pizza.getPrice().multiply(new BigDecimal(pizzas.get(pizza))));
         }
         return price;
     }
@@ -126,12 +129,16 @@ public class Order {
      */
     public BigDecimal getPriceWithDiscountForTheMostExpensivePizza() {
         BigDecimal price = new BigDecimal("0.00");
-        Pizza mostExpensivePizza = pizzas.get(0);
-        for (Pizza pizza : pizzas) {
+        Pizza mostExpensivePizza=null;
+        for(Pizza pizza : pizzas.keySet()){
+            mostExpensivePizza=pizza;
+            break;
+        }
+        for (Pizza pizza : pizzas.keySet()) {
             if (mostExpensivePizza.getPrice().compareTo(pizza.getPrice()) < 0) {
                 mostExpensivePizza = pizza;
             }
-            price = price.add(pizza.getPrice());
+            price= price.add(pizza.getPrice().multiply(new BigDecimal(pizzas.get(pizza))));
         }
         price = price.subtract(mostExpensivePizza.getPrice().multiply(new BigDecimal(DISCOUNT_VALUE)));
         return price;
@@ -169,8 +176,9 @@ public class Order {
     }
 
     private boolean discountForMostExpensiveCondition() {
-        return pizzas.size() > PIZZAS_FOR_DISCOUNT;
+        return countPizzasAmount() > PIZZAS_FOR_DISCOUNT;
     }
+
 
     public void payForOrder() {
         if(status.equals(Status.IN_PROGRESS)){
