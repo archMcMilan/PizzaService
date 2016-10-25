@@ -3,6 +3,8 @@ package ua.rd.pizza.domain;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -11,9 +13,19 @@ import java.util.*;
  */
 @Component
 @Scope("prototype")
-public class Order {
+@Entity
+public class Order implements Serializable {
+    @Id
     private Long id;
+
+    @ElementCollection
+    @CollectionTable
+    @MapKeyClass(Pizza.class)
+    @MapKeyColumn
+    @Column(name="amount")
     private Map<Pizza,Integer> pizzas;
+
+    @ManyToOne
     private Customer customer;
     private Status status;
 
