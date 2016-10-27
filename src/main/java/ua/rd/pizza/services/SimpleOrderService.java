@@ -2,14 +2,13 @@ package ua.rd.pizza.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
-import org.springframework.stereotype.Service;
 import ua.rd.pizza.domain.Customer;
 import ua.rd.pizza.domain.Order;
 import ua.rd.pizza.domain.Pizza;
 import ua.rd.pizza.repository.OrderRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Artem_Pryzhkov on 10/4/2016.
@@ -32,10 +31,10 @@ public class SimpleOrderService implements OrderService/*, ApplicationContextAwa
 
     @Override
     public Order placeNewOrder(Customer customer, Integer... pizzasId) {
-        List<Pizza> pizzas = new ArrayList<>();
+        Map<Pizza,Integer> pizzas = new HashMap<>();
 
         for(Integer id : pizzasId){
-            pizzas.add(pizzaService.getPizzaById(id));  // get Pizza from predifined in-memory list
+            pizzas.merge(pizzaService.getPizzaById(id),pizzas.get(pizzaService.getPizzaById(id)),Integer::sum);  // find Pizza from predifined in-memory list
         }
 //        Order newOrder = new Order(customer, pizzas);
         Order newOrder=createNewOrder();

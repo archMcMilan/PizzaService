@@ -3,32 +3,27 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
     <context:component-scan base-package="ua.rd.pizza.repository"/>
-    <!--<bean name="pizzaRepository"-->
-          <!--class="ua.rd.pizza.repository.InMemoryPizzaRepository"-->
-          <!--init-method="init"-->
-    <!--/>-->
-    <!--<bean name="orderRepository"-->
-          <!--class="ua.rd.pizza.repository.InMemoryOrderRepository"-->
-    <!--/>-->
 
-    <context:property-placeholder
-        system-properties-mode="OVERRIDE"
-        location="classpath:jdbc.properties"/>
+    <jdbc:embedded-database id="dataSource" type="H2">
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-        destroy-method="close">
-        <property name="driverClassName" value="${driver}"/>
-        <property name="url" value="${url}"/>
-        <property name="username" value="${user}"/>
-        <property name="password" value="${password}"/>
-        <property name="initialSize" value="5"/>
-    </bean>
+    </jdbc:embedded-database>
+
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"-->
+        <!--destroy-method="close">-->
+        <!--<property name="driverClassName" value="${driver}"/>-->
+        <!--<property name="url" value="${url}"/>-->
+        <!--<property name="username" value="${user}"/>-->
+        <!--<property name="password" value="${password}"/>-->
+        <!--<property name="initialSize" value="5"/>-->
+    <!--</bean>-->
 
     <bean name="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -39,7 +34,7 @@
         <property name="packagesToScan" value="ua.rd.pizza"/>
         <property name="jpaProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.format_sql">true</prop>

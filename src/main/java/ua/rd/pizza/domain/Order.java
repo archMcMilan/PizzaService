@@ -14,17 +14,12 @@ import java.util.*;
 @Component
 @Scope("prototype")
 @Entity
+@Table(name="Booking")
 public class Order implements Serializable {
     @Id
+    @GeneratedValue
     private Long id;
-
-    @ElementCollection
-    @CollectionTable
-    @MapKeyClass(Pizza.class)
-    @MapKeyColumn
-    @Column(name="amount")
-    private Map<Pizza,Integer> pizzas;
-
+    private Cart cart;
     @ManyToOne
     private Customer customer;
     private Status status;
@@ -54,32 +49,11 @@ public class Order implements Serializable {
     }
 
     public Order() {
-    }
-
-    public Order(Customer customer, Map<Pizza,Integer> pizzas) {
-        this.pizzas = pizzas;
-        if (customer != null) {
-            this.customer = customer;
-        } else {
-            throw new RuntimeException();
-        }
-
         status = Status.NEW;
     }
 
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", pizzas=" + pizzas +
-                ", customer=" + customer +
-                '}';
-    }
-
-
-    public Map<Pizza,Integer> getPizzas() {
-        return pizzas;
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     public void setId(Long id) {
@@ -96,8 +70,8 @@ public class Order implements Serializable {
         }
     }
 
-    public void setPizzas(Map<Pizza,Integer> pizzas) {
-        this.pizzas = pizzas;
+    public Cart getCart() {
+        return cart;
     }
 
     public Status getStatus() {
@@ -106,33 +80,6 @@ public class Order implements Serializable {
 
     public Customer getCustomer() {
         return customer;
-    }
-
-    public boolean addPizza(Pizza pizza, int amount) {
-        int pizzasInOrder=countPizzasAmount();
-        if (pizzasInOrder + amount > 10 || pizzasInOrder + amount <= 0) {
-            return false;
-        }
-        pizzas.merge(pizza,amount,Integer::sum);
-        status=Status.IN_PROGRESS;
-        return true;
-    }
-
-    private int countPizzasAmount(){
-        int pizzasInOrder=0;
-        for(Pizza p:pizzas.keySet()){
-            pizzasInOrder+=pizzas.get(p);
-        }
-        return pizzasInOrder;
-    }
-
-
-    public BigDecimal getOrderFullPrice() {
-        BigDecimal price = new BigDecimal("0.00");
-        for(Pizza pizza:pizzas.keySet()){
-            price= price.add(pizza.getPrice().multiply(new BigDecimal(pizzas.get(pizza))));
-        }
-        return price;
     }
 
     /**
@@ -163,12 +110,12 @@ public class Order implements Serializable {
      * @return
      */
     public BigDecimal getPriceWithCardDiscount(){
-        BigDecimal ceilingOfTheDiscountValue= getOrderFullPrice().multiply(new BigDecimal(DISCOUNT_VALUE));
+        BigDecimal ceilingOfTheDiscountValue= getOrderPrice().multiply(new BigDecimal(DISCOUNT_VALUE));
         BigDecimal accCardDiscountValue=customer.getAccumulativeCard().multiply(new BigDecimal(DISCOUNT_CARD_VALUE));
         if(accCardDiscountCondition(ceilingOfTheDiscountValue, accCardDiscountValue)){
-            return getOrderFullPrice().subtract(ceilingOfTheDiscountValue);
+            return getOrderPrice().subtract(ceilingOfTheDiscountValue);
         }else{
-            return  getOrderFullPrice().subtract(accCardDiscountValue);
+            return  getOrderPrice().subtract(accCardDiscountValue);
         }
     }
 

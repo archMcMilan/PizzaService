@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ua.rd.pizza.annotation.Benchmark;
 import ua.rd.pizza.domain.Pizza;
 import ua.rd.pizza.infrastructure.InitialContext;
-import ua.rd.pizza.repository.InMemoryPizzaRepository;
 import ua.rd.pizza.repository.PizzaRepository;
 
 /**
@@ -27,6 +26,6 @@ public class SimplePizzaService implements PizzaService {
     @Override
     @Benchmark
     public Pizza getPizzaById(Integer id) {
-        return pizzaRepository.get(id);
+        return pizzaRepository.find(Long.valueOf(id));
     }
 }

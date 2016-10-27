@@ -7,9 +7,6 @@ import ua.rd.pizza.infrastructure.Context;
 import ua.rd.pizza.infrastructure.JavaConfig;
 import ua.rd.pizza.repository.PizzaRepository;
 import ua.rd.pizza.services.OrderService;
-import ua.rd.pizza.services.PizzaService;
-import ua.rd.pizza.services.SimpleOrderService;
-import ua.rd.pizza.services.SimplePizzaService;
 
 /**
  * Created by Artem_Pryzhkov on 10/4/2016.
@@ -29,7 +26,7 @@ public class AppRunner {
 
         Context context=new ApplicationContext(new JavaConfig());
         PizzaRepository pizzaRepository=context.getBean("pizzaRepository");
-        //System.out.println(pizzaRepository.get(1));
+        //System.out.println(pizzaRepository.find(1));
 
         Customer customer = null;
         Order order;

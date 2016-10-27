@@ -3,10 +3,10 @@ package ua.rd.pizza.domain;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runners.Parameterized;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,22 +26,30 @@ public class OrderTest {
         customers.add(new Customer(1L, "Daniil", "Nezalezhnosti av"));
         customers.add(new Customer(2L, "Olya", "Pochmelnyka blvd"));
 
-        order=new Order(customers.get(0),new ArrayList<>());
+        order=new Order(customers.get(0),new HashMap<>());
         order.setId(0L);
     }
     @Test
     public void addPizzasWithAmountIntoOrder(){
         initOrder();
-        Assert.assertEquals(3,order.getPizzas().size());
-        Assert.assertEquals(pizzas.get(0),order.getPizzas().get(0));
+        int amount=0;
+        for(Pizza pizza:order.getPizzas().keySet()){
+            amount+=order.getPizzas().get(pizza);
+        }
+        Assert.assertEquals(3,amount);
+        Assert.assertTrue(order.getPizzas().containsKey(pizzas.get(0)));
     }
 
     @Test
     public void addTwoPizzasWithAmountIntoOrder(){
         initOrder();
         order.addPizza(pizzas.get(1),2);
-        Assert.assertEquals(5,order.getPizzas().size());
-        Assert.assertEquals(pizzas.get(1),order.getPizzas().get(4));
+        int amount=0;
+        for(Pizza pizza:order.getPizzas().keySet()){
+            amount+=order.getPizzas().get(pizza);
+        }
+        Assert.assertEquals(5,amount);
+        Assert.assertTrue(order.getPizzas().containsKey(pizzas.get(1)));
     }
 
     @Test
@@ -54,7 +62,7 @@ public class OrderTest {
     @Test
     public void countOrderPrice(){
         initOrder();
-        Assert.assertEquals(new BigDecimal("300.00"),order.getOrderFullPrice());
+        Assert.assertEquals(new BigDecimal("300.00"),order.getOrderPrice());
     }
 
     @Test
@@ -99,7 +107,7 @@ public class OrderTest {
         order.payForOrder();
         Assert.assertEquals(Order.Status.DONE,order.getStatus());
         Assert.assertEquals(new BigDecimal("173.10"),order.getCustomer().getAccumulativeCard());
-        Order order2=new Order(customers.get(0),new ArrayList<>());
+        Order order2=new Order(customers.get(0),new HashMap<>());
         order2.addPizza(pizzas.get(0),2);
         order2.payForOrder();
         Assert.assertEquals(new BigDecimal("355.79"),customers.get(0).getAccumulativeCard());
@@ -112,7 +120,7 @@ public class OrderTest {
         initOrder();
         order.payForOrder();
         Assert.assertEquals(new BigDecimal("570.00"),order.getCustomer().getAccumulativeCard());
-        Order order2=new Order(customers.get(0),new ArrayList<>());
+        Order order2=new Order(customers.get(0),new HashMap<>());
         order2.addPizza(pizzas.get(1),1);
         order2.payForOrder();
         Assert.assertEquals(new BigDecimal("40.39"),order2.countOrderPrice());

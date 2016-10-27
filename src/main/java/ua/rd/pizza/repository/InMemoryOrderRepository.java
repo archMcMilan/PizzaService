@@ -1,7 +1,7 @@
 package ua.rd.pizza.repository;
 
 import org.springframework.stereotype.Repository;
-import ua.rd.pizza.domain.Booking;
+import ua.rd.pizza.domain.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.List;
  */
 @Repository
 public class InMemoryOrderRepository implements OrderRepository {
-    private List<Booking> orders=new ArrayList<>();
+    private List<Order> orders=new ArrayList<>();
     @Override
-    public void saveOrder(Booking newOrder) {
+    public void saveOrder(Order newOrder) {
         orders.add(newOrder);
     }
 }
