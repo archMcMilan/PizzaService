@@ -9,13 +9,6 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <context:component-scan base-package="ua.rd.pizza.repository"/>
-    <!--<bean name="pizzaRepository"-->
-          <!--class="ua.rd.pizza.repository.InMemoryPizzaRepository"-->
-          <!--init-method="init"-->
-    <!--/>-->
-    <!--<bean name="orderRepository"-->
-          <!--class="ua.rd.pizza.repository.InMemoryOrderRepository"-->
-    <!--/>-->
 
     <context:property-placeholder
         system-properties-mode="OVERRIDE"

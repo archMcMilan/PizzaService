@@ -1,6 +1,6 @@
 package ua.rd.pizza;
 
-import ua.rd.pizza.domain.Customer;
+import ua.rd.pizza.domain.customer.Customer;
 import ua.rd.pizza.domain.Order;
 import ua.rd.pizza.infrastructure.ApplicationContext;
 import ua.rd.pizza.infrastructure.Context;

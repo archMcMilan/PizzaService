@@ -1,6 +1,6 @@
 package ua.rd.pizza.services;
 
-import ua.rd.pizza.domain.Customer;
+import ua.rd.pizza.domain.customer.Customer;
 import ua.rd.pizza.domain.Order;
 
 /**

@@ -10,9 +10,9 @@ import java.util.List;
  * Created by Artem_Pryzhkov on 10/4/2016.
  */
 @Repository
-public class InMemoryOrderRepository implements OrderRepository {
+public class InMemoryOrderRepository  {
     private List<Order> orders=new ArrayList<>();
-    @Override
+
     public void saveOrder(Order newOrder) {
         orders.add(newOrder);
     }

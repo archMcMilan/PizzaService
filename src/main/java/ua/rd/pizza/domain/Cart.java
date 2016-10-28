@@ -1,8 +1,6 @@
 package ua.rd.pizza.domain;
 
-import ua.rd.pizza.domain.Customer;
-import ua.rd.pizza.domain.Order;
-import ua.rd.pizza.domain.discount.DiscountCounter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,6 +9,7 @@ import java.util.Map;
 /**
  * Created by Artem_Pryzhkov on 27-Oct-16.
  */
+@Data
 public class Cart {
     @ElementCollection
     @CollectionTable
@@ -30,7 +29,8 @@ public class Cart {
         return true;
     }
 
-    private int countPizzasAmount(){
+
+    public int countPizzasAmount(){
         int pizzasInOrder=0;
         for(Pizza p:pizzas.keySet()){
             pizzasInOrder+=pizzas.get(p);

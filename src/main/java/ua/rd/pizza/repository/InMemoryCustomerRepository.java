@@ -1,11 +1,9 @@
 package ua.rd.pizza.repository;
 
 import org.springframework.stereotype.Repository;
-import ua.rd.pizza.domain.Customer;
+import ua.rd.pizza.domain.customer.Customer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

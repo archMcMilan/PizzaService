@@ -6,24 +6,6 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!--<bean name="order" class="ua.rd.pizza.domain.OrderPizzasPizzas"-->
-        <!--scope="prototype"-->
-    <!--/>-->
-
-    <!--<bean name="pizzaService"-->
-          <!--class="ua.rd.pizza.services.SimplePizzaService">-->
-        <!--<constructor-arg ref="pizzaRepository"/>-->
-    <!--</bean>-->
-    <!--<bean name="pizzaService"-->
-        <!--class="ua.rd.pizza.services.SimplePizzaService"-->
-        <!--autowire="constructor"-->
-    <!--/>-->
-
-    <!--<bean name="orderService"-->
-          <!--class="ua.rd.pizza.services.SimpleOrderService">-->
-        <!--<constructor-arg ref="pizzaService"/>-->
-        <!--<constructor-arg ref="orderRepository"/>-->
-    <!--</bean>-->
     <bean name="orderService"
         class="ua.rd.pizza.services.SimpleOrderService"
         autowire="constructor">

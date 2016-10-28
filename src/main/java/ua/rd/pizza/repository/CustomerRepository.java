@@ -1,6 +1,6 @@
 package ua.rd.pizza.repository;
 
-import ua.rd.pizza.domain.Customer;
+import ua.rd.pizza.domain.customer.Customer;
 
 /**
  * Created by Artem_Pryzhkov on 11-Oct-16.
